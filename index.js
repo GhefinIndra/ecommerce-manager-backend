@@ -6,7 +6,11 @@ const qs = require('qs');
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT; // Hapus fallback 3000
+const PORT = process.env.PORT;
+
+app.get('/', (req, res) => {
+  res.send('<h2>✅ Server hidup! Gunakan endpoint <code>/oauth/callback</code></h2>');
+});
 
 app.get('/oauth/callback', async (req, res) => {
   const { code, state } = req.query;
@@ -47,5 +51,5 @@ app.get('/oauth/callback', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
+  console.log(`🚀 Server berjalan di PORT ${PORT}`);
 });
