@@ -1,24 +1,29 @@
 const express = require('express');
 const axios = require('axios');
 const dotenv = require('dotenv');
-const qs = require('qs'); // Tambahan untuk encode payload
+const qs = require('qs');
+
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Endpoint callback dari TikTok Shop Sandbox
+// Root endpoint (optional, for health check)
+app.get('/', (req, res) => {
+  res.send('✅ TikTok OAuth App is running!');
+});
+
+// TikTok OAuth Callback
 app.get('/oauth/callback', async (req, res) => {
   const { code, state } = req.query;
 
   if (!code) {
-    return res.status(400).send('Authorization code tidak ditemukan');
+    return res.status(400).send('❌ Authorization code tidak ditemukan');
   }
 
   try {
     const tokenUrl = 'https://auth.tiktok-shopsandbox.com/api/token';
 
-    // Format payload ke x-www-form-urlencoded
     const payload = qs.stringify({
       client_key: process.env.CLIENT_KEY,
       client_secret: process.env.CLIENT_SECRET,
@@ -27,7 +32,6 @@ app.get('/oauth/callback', async (req, res) => {
       redirect_uri: process.env.REDIRECT_URI
     });
 
-    // Kirim request ke endpoint token
     const response = await axios.post(tokenUrl, payload, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -44,7 +48,7 @@ app.get('/oauth/callback', async (req, res) => {
     `);
   } catch (error) {
     console.error('❌ Gagal mendapatkan token:', error.response?.data || error.message);
-    res.status(500).send('Gagal menukar authorization code dengan token.');
+    res.status(500).send('❌ Gagal menukar authorization code dengan token.');
   }
 });
 
