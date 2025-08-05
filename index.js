@@ -6,19 +6,13 @@ const qs = require('qs');
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT; // Hapus fallback 3000
 
-// Root endpoint (optional, for health check)
-app.get('/', (req, res) => {
-  res.send('✅ TikTok OAuth App is running!');
-});
-
-// TikTok OAuth Callback
 app.get('/oauth/callback', async (req, res) => {
   const { code, state } = req.query;
 
   if (!code) {
-    return res.status(400).send('❌ Authorization code tidak ditemukan');
+    return res.status(400).send('Authorization code tidak ditemukan');
   }
 
   try {
@@ -48,7 +42,7 @@ app.get('/oauth/callback', async (req, res) => {
     `);
   } catch (error) {
     console.error('❌ Gagal mendapatkan token:', error.response?.data || error.message);
-    res.status(500).send('❌ Gagal menukar authorization code dengan token.');
+    res.status(500).send('Gagal menukar authorization code dengan token.');
   }
 });
 
