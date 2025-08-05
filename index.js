@@ -5,7 +5,7 @@ const qs = require('qs'); // Tambahan untuk encode payload
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Endpoint callback dari TikTok Shop Sandbox
 app.get('/oauth/callback', async (req, res) => {
