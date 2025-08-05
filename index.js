@@ -30,8 +30,8 @@ app.use('*', (req, res) => {
   res.status(404).send('404 - Not Found');
 });
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on 0.0.0.0:${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV}`);
   console.log(`Railway: ${process.env.RAILWAY_ENVIRONMENT ? 'YES' : 'NO'}`);
 });
